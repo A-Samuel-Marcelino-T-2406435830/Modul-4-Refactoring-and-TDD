@@ -128,7 +128,7 @@ public class OrderServiceImplTest {
      @Test
      void testFindAllByAuthorIfLowercase() {
         Order order = orders.get(1);
-        doReturn(orders).when(orderRepository).findAllByAuthor(order.getAuthor().toLowerCase());
+        doReturn(new ArrayList<Order>()).when(orderRepository).findAllByAuthor(order.getAuthor().toLowerCase());
 
         List<Order> results = orderService.findAllByAuthor(order.getAuthor().toLowerCase());
         assertTrue(results.isEmpty());
