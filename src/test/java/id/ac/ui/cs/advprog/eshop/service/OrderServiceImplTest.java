@@ -48,7 +48,7 @@ public class OrderServiceImplTest {
         doReturn(order).when(orderRepository).save(order);
 
         Order result = orderService.createOrder(order);
-        verify(orderRepository, times(1).save(order));
+        verify(orderRepository, times(1)).save(order);
         assertEquals(order.getId(), result.getId());
     }
 
@@ -58,7 +58,7 @@ public class OrderServiceImplTest {
         doReturn(order).when(orderRepository).findById(order.getId());
 
         assertNull(orderService.createOrder(order));
-        verify(orderRepository, times(0)).save(any(order));
+        verify(orderRepository, times(0)).save(order);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class OrderServiceImplTest {
             assertEquals(order.getAuthor(), result.getAuthor());
         }
 
-        assertEqual(2, results.size());
+        assertEquals(2, results.size());
      }
 
      @Test
