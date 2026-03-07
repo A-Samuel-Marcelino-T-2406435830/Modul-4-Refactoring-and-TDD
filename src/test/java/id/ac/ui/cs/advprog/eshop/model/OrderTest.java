@@ -14,6 +14,8 @@ public class OrderTest {
 
     @BeforeEach
     public void setUp() {
+        this.products = new ArrayList<>();
+
         Product product1 = new Product();
         product1.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product1.setProductName("Sampo Cap Bambang");
@@ -46,7 +48,7 @@ public class OrderTest {
         assertEquals("Sampo cap Bambang", order.getProducts().get(0).getProductName());
         assertEquals("Sabun Cap Usep", order.getProducts().get(1).getProductName());
 
-        asserEquals("13652556-012a-4c07-b546-54eb1396d79b", order.getOrderId());
+        assertEquals("13652556-012a-4c07-b546-54eb1396d79b", order.getId());
         assertEquals(1708560000L, order.getOrderTime());
         assertEquals("Safira Sudrajat", order.getAuthor());
         assertEquals("WAITING_PAYMENT", order.getStatus());
