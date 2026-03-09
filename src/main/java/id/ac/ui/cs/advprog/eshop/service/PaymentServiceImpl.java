@@ -6,22 +6,22 @@ import java.util.List;
 
 public class PaymentServiceImpl implements PaymentService {
     @Override
-    public Payment createPayment(Payment payment) {
+    public Payment addPayment(Payment payment) {
         return null;
     }
 
     @Override
-    public Payment updateStatus(String paymentId, String status) {
+    public Payment setStatus(String paymentId, String status) {
         return null;
     }
 
     @Override
-    public Payment findById(String paymentId) {
+    public Payment getPayment(String paymentId) {
         return null;
     }
 
     @Override
-    public List<Payment> findAll() {
+    public List<Payment> getAllPayments() {
         return null;
     }
 }

@@ -35,33 +35,33 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    void testCreatePayment() {
+    void testAddPayment() {
         Payment payment = payments.get(0);
         doReturn(payment).when(paymentRepository).save(payment);
 
-        Payment result = paymentService.createPayment(payment);
+        Payment result = paymentService.addPayment(payment);
         verify(paymentRepository, times(1)).save(payment);
         assertEquals(payment.getId(), result.getId());
     }
 
     @Test
-    void testCreatePaymentIfAlreadyExists() {
+    void testAddPaymentIfAlreadyExists() {
         Payment payment = payments.get(0);
         doReturn(payment).when(paymentRepository).findById(payment.getId());
 
-        assertNull(paymentService.createPayment(payment));
+        assertNull(paymentService.addPayment(payment));
         verify(paymentRepository, times(0)).save(payment);
      }
 
     @Test
-    void testUpdateStatus() {
+    void testSetStatus() {
         Payment payment = payments.get(0);
         Payment newPayment = new Payment(payment.getId(), payment.getMethod(), PaymentStatus.REJECTED.getValue(), payment.getPaymentData());
 
         doReturn(payment).when(paymentRepository).findById(payment.getId());
         doReturn(newPayment).when(paymentRepository).save(newPayment);
 
-        Payment result = paymentService.updateStatus(payment.getId(), PaymentStatus.REJECTED.getValue());
+        Payment result = paymentService.setStatus(payment.getId(), PaymentStatus.REJECTED.getValue());
 
         assertEquals(payment.getId(), result.getId());
         assertEquals(PaymentStatus.REJECTED, result.getStatus());
@@ -69,46 +69,46 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    void testUpdateStatusInvalidStatus() {
+    void testSetStatusInvalidStatus() {
         Payment payment = payments.get(0);
         doReturn(payment).when(paymentRepository).findById(payment.getId());
 
         assertThrows(IllegalArgumentException.class, () -> {
-            paymentService.updateStatus(payment.getId(), "INVALID_STATUS");
+            paymentService.setStatus(payment.getId(), "INVALID_STATUS");
         });
     }
 
     @Test
-    void testUpdateStatusNotFound() {
+    void testSetStatusNotFound() {
         doReturn(null).when(paymentRepository).findById("wdwdw");
 
         assertThrows(IllegalArgumentException.class, () -> {
-            paymentService.updateStatus("wdwdw", PaymentStatus.SUCCESS.getValue());
+            paymentService.setStatus("wdwdw", PaymentStatus.SUCCESS.getValue());
         });
         verify(paymentRepository, times(0)).save(any(Payment.class));
     }
 
     @Test
-    void findByIdIfFound() {
+    void getPaymentIfFound() {
         Payment payment = payments.get(0);
         doReturn(payment).when(paymentRepository).findById(payment.getId());
 
-        Payment result = paymentService.findById(payment.getId());
+        Payment result = paymentService.getPayment(payment.getId());
         assertEquals(payment.getId(), result.getId());
     }
 
     @Test
-    void findByIdIfNotFound() {
+    void getPaymentIfNotFound() {
         doReturn(null).when(paymentRepository).findById("wdwdw");
 
-        assertNull(paymentService.findById("wdwdw"));
+        assertNull(paymentService.getPayment("wdwdw"));
     }
 
     @Test
-    void testFindAll() {
+    void testGetAllPayments() {
         doReturn(payments).when(paymentRepository).findAll();
 
-        List<Payment> result = paymentService.findAll();
+        List<Payment> result = paymentService.getAllPayments();
         for (int i = 0; i < payments.size(); i++) {
             assertEquals(payments.get(i).getId(), result.get(i).getId());
             assertEquals(payments.get(i).getMethod(), result.get(i).getMethod());
