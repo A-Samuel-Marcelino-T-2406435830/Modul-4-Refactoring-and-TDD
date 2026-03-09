@@ -31,6 +31,22 @@ public class Payment {
             throw new IllegalArgumentException();
         }
 
+        if (method == "Voucher Code") {
+            if (!paymentData.get("voucherCode").contains("ESHOP") ||
+                    paymentData.get("voucherCode").length()!=16 ||
+                    paymentData.get("voucherCode").replaceAll("\\D","").length()!=8) {
+                this.status = "REJECTED";
+            }
+        }
+        else if (method == "Payment by Bank Transfer") {
+            if (paymentData.get("bankName")=="" ||
+                    paymentData.get("bankName")==null ||
+                    paymentData.get("referenceCode")=="" ||
+                    paymentData.get("referenceCode")==null) {
+                this.status = "REJECTED";
+            }
+        }
+
         this.paymentData = paymentData;
     }
 
@@ -42,6 +58,5 @@ public class Payment {
             throw new IllegalArgumentException();
         }
     }
-
 
 }
