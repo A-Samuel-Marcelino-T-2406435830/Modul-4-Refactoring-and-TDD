@@ -15,23 +15,20 @@ public class PaymentTest {
 
     @Test
     void createVoucherPaymentNoEshop() {
-             assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", "Voucher Code", "FAILED", Map.of("voucherCode", "AAAAA1234ABC5678"));
-        });
+        Payment payment = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", "Voucher Code", "SUCCESS", Map.of("voucherCode", "AAAAA1234ABC5678"));
+        assertEquals("REJECTED", payment.getStatus());
     }
 
     @Test
     void createVoucherPaymentLengthLessThan16() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", "Voucher Code", "FAILED", Map.of("voucherCode", "BB1234ABC567"));
-        });
+        Payment payment = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", "Voucher Code", "SUCCESS", Map.of("voucherCode", "BB1234ABC567"));
+        assertEquals("REJECTED", payment.getStatus());
     }
 
     @Test
     void createVoucherPaymentLessThan8Num() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", "Voucher Code", "FAILED", Map.of("voucherCode", "ESHOP12AAABC5678"));
-        });
+        Payment payment = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", "Voucher Code", "SUCCESS", Map.of("voucherCode", "ESHOP12AAABC5678"));
+        assertEquals("REJECTED", payment.getStatus());
     }
 
     @Test
@@ -68,5 +65,32 @@ public class PaymentTest {
         assertEquals("Voucher Code", payment.getMethod());
         assertEquals("REJECTED", payment.getStatus());
         assertEquals(Map.of("voucherCode", "ESHOP1234ABC5678"), payment.getPaymentData());
+    }
+
+    @Test
+    void createBankTransferPaymentNoBankName() {
+        Payment payment = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd8", "Payment by Bank Transfer", "SUCCESS", Map.of("referenceCode", "1234567890"));
+        assertEquals("REJECTED", payment.getStatus());
+    }
+
+    @Test
+    void createBankTransferPaymentNoReferenceCode() {
+        Payment payment = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd8", "Payment by Bank Transfer", "SUCCESS", Map.of("bankName", "BCA"));
+        assertEquals("REJECTED", payment.getStatus());
+    }
+
+    @Test
+    void createBankTransferPaymentNoPaymentData() {
+        Payment payment = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd8", "Payment by Bank Transfer", "SUCCESS", Map.of());
+        assertEquals("REJECTED", payment.getStatus());
+    }
+
+    @Test
+    void createBankTransferPaymentValid() {
+        Payment payment = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd8", "Payment by Bank Transfer", "REJECTED", Map.of("bankName", "BCA", "referenceCode", "1234567890"));
+        assertEquals("eb558e9f-1c39-460e-8860-71af6af63bd8", payment.getId());
+        assertEquals("Payment by Bank Transfer", payment.getMethod());
+        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(Map.of("bankName", "BCA", "referenceCode", "1234567890"), payment.getPaymentData());
     }
 }
