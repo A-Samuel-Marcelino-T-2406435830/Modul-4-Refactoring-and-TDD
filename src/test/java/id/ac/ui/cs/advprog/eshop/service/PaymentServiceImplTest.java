@@ -40,7 +40,7 @@ public class PaymentServiceImplTest {
         doReturn(payment).when(paymentRepository).save(payment);
 
         Payment result = paymentService.createPayment(payment);
-        verify(paymentRepository), times(1)).save(payment);
+        verify(paymentRepository, times(1)).save(payment);
         assertEquals(payment.getId(), result.getId());
     }
 
@@ -73,7 +73,7 @@ public class PaymentServiceImplTest {
         Payment payment = payments.get(0);
         doReturn(payment).when(paymentRepository).findById(payment.getId());
 
-        assertThrows(IllegalArgumentException, () -> {)
+        assertThrows(IllegalArgumentException.class, () -> {
             paymentService.updateStatus(payment.getId(), "INVALID_STATUS");
         });
     }
