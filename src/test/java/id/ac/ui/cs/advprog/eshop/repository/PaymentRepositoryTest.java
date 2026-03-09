@@ -21,7 +21,7 @@ public class PaymentRepositoryTest {
         payments = new ArrayList<>();
         Payment payment1 = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", "Voucher Code", "SUCCESS", Map.of("voucherCode", "ESHOP1234ABC5678"));
         Payment payment2 = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd7", "Voucher Code", "SUCCESS", Map.of("voucherCode", "ESHOP1234ABC5679"));
-        Payment payment3 = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd8", "Payment by Bank Transfer", "FAILED", Map.of("bankName", "BCA", "referenceCode", "1234567890"));
+        Payment payment3 = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd8", "Payment by Bank Transfer", "REJECTED", Map.of("bankName", "BCA", "referenceCode", "1234567890"));
         payments.add(payment1);
         payments.add(payment2);
         payments.add(payment3);
