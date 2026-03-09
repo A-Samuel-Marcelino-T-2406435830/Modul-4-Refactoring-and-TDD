@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
 import id.ac.ui.cs.advprog.eshop.model.Payment;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.util.AssertionErrors.assertNull;
 
 public class PaymentRepositoryTest {
     PaymentRepository paymentRepository;
@@ -74,7 +74,7 @@ public class PaymentRepositoryTest {
         }
 
         Payment findResult = paymentRepository.findById("non-existent-id");
-        assertNull(findResult);
+        Assertions.assertNull(findResult);
     }
 
     @Test
