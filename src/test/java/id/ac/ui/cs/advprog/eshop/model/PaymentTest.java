@@ -15,7 +15,7 @@ public class PaymentTest {
 
     @Test
     void createVoucherPaymentNoEshop() {
-        assertThrows(IllegalArgumentException.class, () -> {
+             assertThrows(IllegalArgumentException.class, () -> {
             new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", "Voucher Code", "FAILED", Map.of("voucherCode", "AAAAA1234ABC5678"));
         });
     }
@@ -41,7 +41,6 @@ public class PaymentTest {
         });
     }
 
-
     @Test
     void createVoucherPaymentValid() {
         Payment payment = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", "Voucher Code", "SUCCESS", Map.of("voucherCode", "ESHOP1234ABC5678"));
@@ -51,6 +50,23 @@ public class PaymentTest {
         assertEquals(Map.of("voucherCode", "ESHOP1234ABC5678"), payment.getPaymentData());
     }
 
+    @Test
+    void setPaymentStatusInvalid() {
+        Payment payment = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", "Voucher Code", "SUCCESS", Map.of("voucherCode", "ESHOP1234ABC5678"));
 
+        assertThrows(IllegalArgumentException.class, () -> {
+            payment.setStatus("INVALID_STATUS");
+        });
+    }
 
+    @Test
+    void setPaymentStatusValid() {
+        Payment payment = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", "Voucher Code", "SUCCESS", Map.of("voucherCode", "ESHOP1234ABC5678"));
+
+        payment.setStatus("REJECTED");
+        assertEquals("eb558e9f-1c39-460e-8860-71af6af63bd6", payment.getId());
+        assertEquals("Voucher Code", payment.getMethod());
+        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(Map.of("voucherCode", "ESHOP1234ABC5678"), payment.getPaymentData());
+    }
 }
