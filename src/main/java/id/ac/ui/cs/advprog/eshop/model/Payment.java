@@ -9,12 +9,14 @@ import java.util.Map;
 @Getter
 public class Payment {
     private String id;
+    private Order order;
     private String method;
     private String status;
-    Map<String, String> paymentData;
+    private Map<String, String> paymentData;
 
-    public Payment(String id, String method, String status, Map<String, String> paymentData) {
+    public Payment(String id, Order order, String method, String status, Map<String, String> paymentData) {
         this.id = id;
+        this.order = order;
         this.method = verifyMethod(method);
         this.status = verifyStatus(status);
         this.paymentData = paymentData;
