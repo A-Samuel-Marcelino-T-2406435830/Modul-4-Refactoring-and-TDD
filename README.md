@@ -1,3 +1,33 @@
+# *Module 4 Maintainability & OO Principles*
+## Reflection 1
+1. TDD forces me to write down test before even writing down the skeleton
+of the class. This makes me think about the design of the class and its methods
+before I even write the code. Without TDD, I usually make the skeleton first, then 
+guess what the behaviour of the methods will be. 
+With TDD, I have to actually plan what the methods will do, and how they will interact with each other.
+This really helps me to plan for the class I'm about to implement.
+More than that, the tests written in the beginning of TDD are really helpful when
+developing the class, since I can just run the tests to check if the class is
+properly implemented or not. Even though it is a bit time and mentally consuming, 
+it really helps development efficiency in the long run. 
+From here, I learned that when making a class, instead of guessing or assuming how it works, 
+I should plan it out first by writing tests.
+
+
+2. My tests have implemented F.I.R.S.T principles. Each test
+is only focused on one specific behaviour/method of a class. This way, if a test fails, I can easily identify which method is not working properly.
+This also helps in making the tests more readable and faster to run. Each test is also independent, meaning that it doesn't rely on the result of another test. This way, I can run each test separately without worrying about the order of tests. The tests are also repeatable, since they don't rely on any external factors such as database or file system. This way, I can run the tests multiple times and get the same results. The tests are also self-validating, since they have assertions that check if the expected results are met. 
+This way, I can easily identify if a test has passed or failed just by looking at the assertions, which means the tests are self-validating.
+The tests are also repeatable, since they don't rely on external factors such as databases because they use mocks.
+Meaning that I can run the tests multiple times and get the same results. 
+The tests are also timely, since they are made before the actual implementation of the code. 
+This ensures that the code is design to be able to be tested.
+
+
+
+
+
+
 # *Module 3 Maintainability & OO Principles*
 ## Reflection
 ### SRP
