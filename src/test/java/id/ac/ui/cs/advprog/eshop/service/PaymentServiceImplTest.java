@@ -1,7 +1,9 @@
 package id.ac.ui.cs.advprog.eshop.service;
 
 import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
+import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
+import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,9 +29,22 @@ public class PaymentServiceImplTest {
 
     @BeforeEach
     public void setUp() {
+        List<Product> products = new ArrayList<>();
+        Product product1 = new Product();
+        product1.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product1.setProductName("Sampo Cap Bambang");
+        product1.setProductQuantity(2);
+        products.add(product1);
+
+        List<Order> orders = new ArrayList<>();
+        Order order1 = new Order("13652556-012a-4c07-b546-54eb1396d79b", products, 1708560000L, "Safira Sudrajat");
+        orders.add(order1);
+        Order order2 = new Order("7f9e15bb-4b15-42f4-aebc-c3af385fb078", products, 1708570000L, "Safira Sudrajat");
+        orders.add(order2);
+
         payments = new ArrayList<>();
-        Payment payment1 = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", "Voucher Code", PaymentStatus.SUCCESS.getValue(), Map.of("voucherCode", "ESHOP1234ABC5678"));
-        Payment payment2 = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd8", "Payment by Bank Transfer", PaymentStatus.REJECTED.getValue(), Map.of("bankName", "BCA", "referenceCode", "1234567890"));
+        Payment payment1 = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd6", order1, "Voucher Code", PaymentStatus.SUCCESS.getValue(), Map.of("voucherCode", "ESHOP1234ABC5678"));
+        Payment payment2 = new Payment("eb558e9f-1c39-460e-8860-71af6af63bd7", order2, "Payment by Bank Transfer", PaymentStatus.REJECTED.getValue(), Map.of("bankName", "BCA", "referenceCode", "1234567890"));
         payments.add(payment1);
         payments.add(payment2);
     }
@@ -56,12 +71,12 @@ public class PaymentServiceImplTest {
     @Test
     void testSetStatus() {
         Payment payment = payments.get(0);
-        Payment newPayment = new Payment(payment.getId(), payment.getMethod(), PaymentStatus.REJECTED.getValue(), payment.getPaymentData());
+        Payment newPayment = new Payment(payment.getId(), payment.getOrder(), payment.getMethod(), PaymentStatus.REJECTED.getValue(), payment.getPaymentData());
 
         doReturn(payment).when(paymentRepository).findById(payment.getId());
         doReturn(newPayment).when(paymentRepository).save(newPayment);
 
-        Payment result = paymentService.setStatus(payment.getId(), PaymentStatus.REJECTED.getValue());
+        Payment result = paymentService.setStatus(payment, PaymentStatus.REJECTED.getValue());
 
         assertEquals(payment.getId(), result.getId());
         assertEquals(PaymentStatus.REJECTED, result.getStatus());
@@ -74,16 +89,17 @@ public class PaymentServiceImplTest {
         doReturn(payment).when(paymentRepository).findById(payment.getId());
 
         assertThrows(IllegalArgumentException.class, () -> {
-            paymentService.setStatus(payment.getId(), "INVALID_STATUS");
+            paymentService.setStatus(payment, "INVALID_STATUS");
         });
     }
 
     @Test
     void testSetStatusNotFound() {
-        doReturn(null).when(paymentRepository).findById("wdwdw");
+        Payment payment = payments.get(0);
+        doReturn(null).when(paymentRepository).findById(payment.getId());
 
         assertThrows(IllegalArgumentException.class, () -> {
-            paymentService.setStatus("wdwdw", PaymentStatus.SUCCESS.getValue());
+            paymentService.setStatus(payment, PaymentStatus.SUCCESS.getValue());
         });
         verify(paymentRepository, times(0)).save(any(Payment.class));
     }
@@ -99,9 +115,10 @@ public class PaymentServiceImplTest {
 
     @Test
     void getPaymentIfNotFound() {
-        doReturn(null).when(paymentRepository).findById("wdwdw");
+        Payment payment = payments.get(0);
+        doReturn(null).when(paymentRepository).findById(payment.getId());
 
-        assertNull(paymentService.getPayment("wdwdw"));
+        assertNull(paymentService.getPayment(payment.getId()));
     }
 
     @Test

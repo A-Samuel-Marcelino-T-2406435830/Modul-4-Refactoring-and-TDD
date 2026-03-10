@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PaymentService {
     public Payment addPayment(Payment payment);
-    public Payment setStatus(String paymentId, String status);
+    public Payment setStatus(Payment payment, String status);
     public Payment getPayment(String paymentId);
     public List<Payment> getAllPayments();
 }
