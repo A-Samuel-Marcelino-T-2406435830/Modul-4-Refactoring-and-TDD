@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.service;
 
+import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
 import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
@@ -69,9 +70,9 @@ public class PaymentServiceImplTest {
      }
 
     @Test
-    void testSetStatus() {
+    void testSetStatusToRejected() {
         Payment payment = payments.get(0);
-        Payment newPayment = new Payment(payment.getId(), payment.getOrder(), payment.getMethod(), PaymentStatus.REJECTED.getValue(), payment.getPaymentData());
+        Payment newPayment = new Payment(payment.getId(), payment.getOrder(), payment.getMethod(), PaymentStatus.SUCCESS.getValue(), payment.getPaymentData());
 
         doReturn(payment).when(paymentRepository).findById(payment.getId());
         doReturn(newPayment).when(paymentRepository).save(newPayment);
@@ -79,7 +80,24 @@ public class PaymentServiceImplTest {
         Payment result = paymentService.setStatus(payment, PaymentStatus.REJECTED.getValue());
 
         assertEquals(payment.getId(), result.getId());
-        assertEquals(PaymentStatus.REJECTED, result.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), result.getStatus());
+        assertEquals(OrderStatus.FAILED.getValue(), result.getOrder().getStatus());
+        verify(paymentRepository, times(1)).save(any(Payment.class));
+    }
+
+    @Test
+    void testSetStatusToSuccess() {
+        Payment payment = payments.get(0);
+        Payment newPayment = new Payment(payment.getId(), payment.getOrder(), payment.getMethod(), PaymentStatus.REJECTED.getValue(), payment.getPaymentData());
+
+        doReturn(payment).when(paymentRepository).findById(payment.getId());
+        doReturn(newPayment).when(paymentRepository).save(newPayment);
+
+        Payment result = paymentService.setStatus(payment, PaymentStatus.SUCCESS.getValue());
+
+        assertEquals(payment.getId(), result.getId());
+        assertEquals(PaymentStatus.SUCCESS.getValue(), result.getStatus());
+        assertEquals(OrderStatus.SUCCESS.getValue(), result.getOrder().getStatus());
         verify(paymentRepository, times(1)).save(any(Payment.class));
     }
 
