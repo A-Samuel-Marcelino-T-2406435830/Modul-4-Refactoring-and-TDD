@@ -72,10 +72,11 @@ public class PaymentServiceImplTest {
     @Test
     void testSetStatusToRejected() {
         Payment payment = payments.get(0);
+        payment.getOrder().setStatus(OrderStatus.SUCCESS.getValue());
         Payment newPayment = new Payment(payment.getId(), payment.getOrder(), payment.getMethod(), PaymentStatus.SUCCESS.getValue(), payment.getPaymentData());
 
         doReturn(payment).when(paymentRepository).findById(payment.getId());
-        doReturn(newPayment).when(paymentRepository).save(newPayment);
+        doReturn(newPayment).when(paymentRepository).save(any(Payment.class));
 
         Payment result = paymentService.setStatus(payment, PaymentStatus.REJECTED.getValue());
 
@@ -88,10 +89,11 @@ public class PaymentServiceImplTest {
     @Test
     void testSetStatusToSuccess() {
         Payment payment = payments.get(0);
+        payment.getOrder().setStatus(OrderStatus.FAILED.getValue());
         Payment newPayment = new Payment(payment.getId(), payment.getOrder(), payment.getMethod(), PaymentStatus.REJECTED.getValue(), payment.getPaymentData());
 
         doReturn(payment).when(paymentRepository).findById(payment.getId());
-        doReturn(newPayment).when(paymentRepository).save(newPayment);
+        doReturn(newPayment).when(paymentRepository).save(any(Payment.class));
 
         Payment result = paymentService.setStatus(payment, PaymentStatus.SUCCESS.getValue());
 
@@ -155,3 +157,4 @@ public class PaymentServiceImplTest {
     }
 
 }
+
